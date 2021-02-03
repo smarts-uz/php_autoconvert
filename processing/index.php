@@ -12,7 +12,8 @@ else
 
 set_time_limit(0);
 $diffTime= 60;
-
+$start_time = date('s');
+$end_time = date('s');
 
 function redirect_to_success($id)
 {
@@ -154,17 +155,16 @@ function main()
 
     global $diffTime;
 
-    $start_time = date('s');
-    $end_time = date('s');
+    global $start_time;
+    global $end_time;
 
     $diff = abs($start_time - $end_time);
 
     while ($diff < $diffTime) {
-       $return = check_for_approved();
+        $return = check_for_approved();
         $end_time = date('s');
         sleep(2);
-    }
-    
+    }    
     redirect_to_declined($return);
 
     //  redirect_to_declined($jsonArrayResponse['Reference']);
