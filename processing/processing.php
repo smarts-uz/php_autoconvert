@@ -6,7 +6,7 @@
 
 
 set_time_limit(0);
-$diffTime= 50;
+$diffTime= 5;
 
 
 function redirect($url)
@@ -45,12 +45,18 @@ function redirect_to_declined($id)
     //echo 'declined';
 }
 
-function redirect_to_approved($id)
+function redirect_to_approved($id, $loan_amount, $forename)
 {
-    redirect("http://carplus.co.uk/quote/approved?". $id);
+    redirect("http://carplus.co.uk/quote/approved?". $id."&loan_amount=".$loan_amount."&forename=".$forename);
     // header("Location: http://carplus.co.uk/quote/approved?". $id);
     exit();
     // echo 'approved';
+}
+
+function redirect_to_nothing()
+{
+    redirect("http://carplus.co.uk/quote");
+    exit();
 }
 
 function get_data()
@@ -149,14 +155,17 @@ function check_for_approved()
     $reference = $jsonArrayResponse['Enquiry']['Reference'];
     switch ($data) {
         case '1. Approved':
-            redirect_to_approved($reference);
+            redirect_to_approved($reference, $jsonArrayResponse['Enquiry']['AmountToBorrow'], $jsonArrayResponse['Enquiry']['MainApplicant']['Forename']);
             break;
 
         case 'Declined':
             redirect_to_declined($reference);
             break;
-
+        // case null:
+        //     continue;
         default:
+            // redirect_to_nothing();
+            // break;
 
     }
 
